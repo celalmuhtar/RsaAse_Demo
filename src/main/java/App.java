@@ -1,40 +1,42 @@
-import dto.*;
+import az.com.cybernet.dto.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.*;
+import lombok.extern.slf4j.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.client.*;
-import services.*;
+import az.com.cybernet.services.*;
 
-import java.util.*;
-
+@Slf4j
 @RequiredArgsConstructor
 public class App {
   public static void main(String[] args) throws Exception {
     /*------------------Bu hissə standart java api düzəltdiyim üçün məcbur əlavə etmişəm-----------*/
     AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-    context.scan("services");
+    context.scan("az.com.cybernet.dto.services");
     context.refresh();
     UtilService service = context.getBean(UtilService.class);
     /*---------------son--------------*/
 
     String aesKey = service.getRandomAesKey();
-    System.out.println(aesKey);
+    log.info(aesKey);
 
     String str = "{\"voen\":\"9900050571\"}";
     String encryptedPayload = service.encryptTextUsingAES(str, aesKey);
-    System.out.println(encryptedPayload);
+    log.info(encryptedPayload);
 
-    String encryptedKey = service.encryptAESKey(aesKey, "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKtAUsccrWd6trAMxnhWbvGnl1Dp1olalRfZhBKI9EWwtxBdw494fDAYCb3WkLVUfeKHvKeu7fgfLmJ1yKivyz0CAwEAAQ==");
-    System.out.println(encryptedKey);
-
+    /*public key-nizi əlavə edəcəksiniz*/
+    String encryptedKey = service.encryptAESKey(aesKey, "");
+    log.info(encryptedKey);
 
     RestTemplate restTemplate = new RestTemplate();
-    String url = "http://dvxintegenc.vn.local/v1/api/integ/proxyapi/callDvxService";
+    /*Asan Bridg tərəfindən verilən url daxil edəcəksiniz*/
+    String url = "";
 
     PrimaryRequestDto dto = new PrimaryRequestDto();
-    dto.setClientId("76ca7091-7361-4270-86e8-64019043e25c");
-    dto.setOperation("WS_ITS_GET_TAXPAYER_INFO");
+    /*Sizə məxsus clientId əlavə edəcəksiniz*/
+    dto.setClientId("");
+    /*sizə təqdim edilən servisin adını əlavə edəcəksiniz*/
+    dto.setOperation("");
     dto.setEncryptedKey(encryptedKey);
     dto.setEncryptedPayload(encryptedPayload);
 
@@ -45,7 +47,8 @@ public class App {
 
     ResponseEntity<String> result = restTemplate.postForEntity(url, request, String.class);
 
-    System.out.println(result);
+    log.info(result.getBody());
+
 
     /*----------*/
     context.close();

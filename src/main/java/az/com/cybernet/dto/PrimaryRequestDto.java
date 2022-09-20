@@ -1,4 +1,4 @@
-package dto;
+package az.com.cybernet.dto;
 
 import lombok.*;
 
