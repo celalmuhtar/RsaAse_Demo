@@ -1,3 +1,5 @@
+package az.com.cybernet;
+
 import az.com.cybernet.dto.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -20,7 +22,7 @@ public class App {
     String aesKey = service.getRandomAesKey();
     log.info(aesKey);
 
-    String str = "{\"voen\":\"9900050571\"}";
+    String str = "{\"voen\":\"1234567890\"}";
     String encryptedPayload = service.encryptTextUsingAES(str, aesKey);
     log.info(encryptedPayload);
 
