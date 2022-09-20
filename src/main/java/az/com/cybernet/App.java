@@ -14,7 +14,7 @@ public class App {
   public static void main(String[] args) throws Exception {
     /*------------------Bu hissə standart java api düzəltdiyim üçün məcbur əlavə etmişəm-----------*/
     AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-    context.scan("az.com.cybernet.dto.services");
+    context.scan("az.com.cybernet.services");
     context.refresh();
     UtilService service = context.getBean(UtilService.class);
     /*---------------son--------------*/
