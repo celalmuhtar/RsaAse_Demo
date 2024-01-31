@@ -12,4 +12,5 @@ public interface UtilService {
   String encryptAESKey(String plainAESKey, PublicKey publicKey);
   Map<String, Object> jsonStringToMap(String json);
   String encryptAESKey(String plainAESKey, String sPublicKey);
+  String encryptAESKeyEdliyye(String reqest, String sPublicKey);
 }

@@ -131,6 +131,11 @@ public class UtilServiceImpl implements UtilService {
 
   @Override
   public String encryptAESKey(String plainAESKey, String sPublicKey) {
+    PublicKey publicKey = convertStringToPublicKey(sPublicKey);
+    return encryptAESKey(plainAESKey, publicKey);
+  }
+
+  private PublicKey convertStringToPublicKey(String sPublicKey) {
     PublicKey publicKey = null;
     try {
       byte[] privateKeyBytes = Base64.getDecoder().decode(sPublicKey.getBytes("utf-8"));
@@ -144,7 +149,30 @@ public class UtilServiceImpl implements UtilService {
     } catch (InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
-    return encryptAESKey(plainAESKey, publicKey);
+    return publicKey;
+  }
+
+  private PublicKey convertStringToPublicKeyEdliyye(String sPublicKey) {
+    PublicKey publicKey = null;
+    try {
+      byte[] privateKeyBytes = Base64.getDecoder().decode(sPublicKey.getBytes("utf-8"));
+      X509EncodedKeySpec keySpec = new X509EncodedKeySpec(privateKeyBytes);
+      KeyFactory fact = KeyFactory.getInstance("RSA/None/PKCS1Padding");
+      publicKey = fact.generatePublic(keySpec);
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    } catch (InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
+    return publicKey;
+  }
+
+  @Override
+  public String encryptAESKeyEdliyye(String reqest, String sPublicKey) {
+    PublicKey publicKey = convertStringToPublicKeyEdliyye(sPublicKey);
+    return encryptAESKey(reqest, publicKey);
   }
 
   @Override
